@@ -20,7 +20,6 @@ import {
 interface LoanOption {
   id: number;
   fee: string;
-  promoFee?: string;
   receive: string;
   period: string;
 }
@@ -30,14 +29,14 @@ const LOAN_OPTIONS: LoanOption[] = [
   { id: 2, fee: "888 MT", receive: "8.000–10.000 MT", period: "4 meses" },
   { id: 3, fee: "1099 MT", receive: "12.000–15.000 MT", period: "5 meses" },
   { id: 4, fee: "1257 MT", receive: "20.000–23.000 MT", period: "6 meses" },
-  { id: 5, fee: "1693 MT", promoFee: "1270 MT", receive: "25.000–37.000 MT", period: "7 meses" },
-  { id: 6, fee: "1903 MT", promoFee: "1427 MT", receive: "50.000–64.000 MT", period: "8 meses" },
-  { id: 7, fee: "2109 MT", promoFee: "1582 MT", receive: "68.000–86.000 MT", period: "9 meses" },
-  { id: 8, fee: "2601 MT", promoFee: "1951 MT", receive: "87.000–100.000 MT", period: "10 meses" },
-  { id: 9, fee: "2903 MT", promoFee: "2177 MT", receive: "120.000–135.000 MT", period: "11 meses" },
-  { id: 10, fee: "3016 MT", promoFee: "2262 MT", receive: "136.000–167.000 MT", period: "12 meses" },
-  { id: 11, fee: "3801 MT", promoFee: "2851 MT", receive: "168.000–189.000 MT", period: "13 meses" },
-  { id: 12, fee: "4016 MT", promoFee: "3012 MT", receive: "190.000–200.000 MT", period: "14 meses" },
+  { id: 5, fee: "1693 MT", receive: "25.000–37.000 MT", period: "7 meses" },
+  { id: 6, fee: "1903 MT", receive: "50.000–64.000 MT", period: "8 meses" },
+  { id: 7, fee: "2109 MT", receive: "68.000–86.000 MT", period: "9 meses" },
+  { id: 8, fee: "2601 MT", receive: "87.000–100.000 MT", period: "10 meses" },
+  { id: 9, fee: "2903 MT", receive: "120.000–135.000 MT", period: "11 meses" },
+  { id: 10, fee: "3016 MT", receive: "136.000–167.000 MT", period: "12 meses" },
+  { id: 11, fee: "3801 MT", receive: "168.000–189.000 MT", period: "13 meses" },
+  { id: 12, fee: "4016 MT", receive: "190.000–200.000 MT", period: "14 meses" },
 ];
 
 const containerVariants = {
@@ -69,24 +68,6 @@ function App() {
   const [notification, setNotification] = useState<{ name: string; amount: string } | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [notificationHistory, setNotificationHistory] = useState<{ name: string; amount: string; time: string }[]>([]);
-  const [repaymentMethod, setRepaymentMethod] = useState<'monthly' | 'end_of_term' | null>(null);
-  const [liveUsers, setLiveUsers] = useState(38);
-
-  useEffect(() => {
-    // Somente inicia se estivermos no lado do cliente
-    if (typeof window !== 'undefined') {
-      const interval = setInterval(() => {
-        setLiveUsers(prev => {
-          const change = Math.floor(Math.random() * 5) - 2; // Oscila entre -2 e +2
-          const next = prev + change;
-          if (next < 20) return 22;
-          if (next > 70) return 68;
-          return next;
-        });
-      }, 7000);
-      return () => clearInterval(interval);
-    }
-  }, []);
   const [copiedNumber, setCopiedNumber] = useState<string | null>(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -391,55 +372,8 @@ function App() {
     }, interval);
   };
 
-  // Helper to calculate monthly payment range (Flex Mola Style)
-  const getMonthlyPaymentRange = (receiveStr: string, periodStr: string) => {
-    // Extract number of months
-    const monthsMatch = periodStr.match(/\d+/);
-    const months = monthsMatch ? parseInt(monthsMatch[0]) : 1;
-
-    // Extract amounts from range (e.g. "5.000–7.000")
-    // Replace dots and parse
-    const amounts = receiveStr.replace(' MT', '').split(/[–-]/).map(s => {
-      const clean = s.replace(/\./g, '').trim();
-      return parseInt(clean);
-    });
-
-    if (amounts.length === 2 && !isNaN(amounts[0]) && !isNaN(amounts[1])) {
-      const min = Math.ceil(amounts[0] / months);
-      const max = Math.ceil(amounts[1] / months);
-      
-      const format = (val: number) => val.toLocaleString('pt-MZ').replace(/,/g, '.');
-      return `${format(min)} MT a ${format(max)} MT`;
-    } else if (amounts.length === 1 && !isNaN(amounts[0])) {
-      const single = Math.ceil(amounts[0] / months);
-      return `${single.toLocaleString('pt-MZ').replace(/,/g, '.')} MT`;
-    }
-    
-    return "--- MT";
-  };
-
-  // Helper to calculate target month (for End of Term)
-  const getTargetMonth = (periodStr: string) => {
-    const monthsMatch = periodStr.match(/\d+/);
-    const monthsToAdd = monthsMatch ? parseInt(monthsMatch[0]) : 1;
-    
-    const now = new Date();
-    const targetDate = new Date(now.setMonth(now.getMonth() + monthsToAdd));
-    
-    const monthNames = [
-      "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-      "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-    ];
-    
-    return {
-      month: monthNames[targetDate.getMonth()],
-      year: targetDate.getFullYear(),
-      count: monthsToAdd
-    };
-  };
-
   return (
-    <div style={{ backgroundColor: '#04160f', minHeight: '100vh', color: '#fcfbf8', paddingBottom: '2rem', overflowX: 'hidden', position: 'relative' }}>
+    <div style={{ backgroundColor: '#04160f', minHeight: '100vh', color: '#fcfbf8', paddingBottom: '2rem', overflowX: 'hidden' }}>
       {/* Admin Panel Modal */}
       <AnimatePresence>
         {isAdminOpen && (
@@ -855,8 +789,6 @@ function App() {
         )}
       </AnimatePresence>
 
-      {/* Live Activity Indicator Removed from Fixed Position */}
-
       {/* Floating Notification */}
       <AnimatePresence>
         {notification && (
@@ -963,63 +895,6 @@ function App() {
             Crédito de <span className="text-gold">5.000 a 200.000 MZN</span><br />
             aprovação em até <span className="text-red">8 minutos</span>
           </p>
-
-          {/* Women's Month Promotion Banner */}
-          <motion.div
-            variants={itemVariants}
-            style={{
-              background: 'linear-gradient(135deg, #2a1b2a 0%, #04160f 100%)',
-              borderRadius: '1.5rem',
-              padding: '2rem',
-              margin: '2rem 0',
-              border: '1px solid rgba(251, 113, 133, 0.3)',
-              position: 'relative',
-              overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(251, 113, 133, 0.1)'
-            }}
-          >
-            <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.1 }}>
-              <span style={{ fontSize: '10rem' }}>🌸</span>
-            </div>
-            
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              <div style={{ 
-                backgroundColor: 'rgba(251, 113, 133, 0.15)', 
-                color: '#fb7185', 
-                padding: '0.4rem 1rem', 
-                borderRadius: '2rem', 
-                fontSize: '0.75rem', 
-                fontWeight: 800,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                marginBottom: '1rem',
-                border: '1px solid rgba(251, 113, 133, 0.2)'
-              }}>
-                <span>🌹</span> ESPECIAL MÊS DA MULHER
-              </div>
-              
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fcfbf8', marginBottom: '0.5rem', lineHeight: 1.2 }}>
-                Mulher de <span style={{ color: '#fb7185' }}>Ouro</span> ✨
-              </h2>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '1.5rem' }}>
-                Valorizamos a força da mulher moçambicana. <br />
-                Aproveite <span style={{ color: '#fb7185', fontWeight: 700 }}>25% DE DESCONTO</span> em todas as taxas de inscrição.
-              </p>
-              
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Válido até</div>
-                  <div style={{ color: 'white', fontWeight: 700 }}>30 de Abril</div>
-                </div>
-                <div style={{ width: '1px', backgroundColor: 'rgba(255,255,255,0.1)' }}></div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Exclusivo</div>
-                  <div style={{ color: 'white', fontWeight: 700 }}>Público Feminino</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
 
           {/* Video Section - Vertical Format */}
           <motion.div 
@@ -1151,37 +1026,6 @@ function App() {
               </span>
             </div>
           </motion.div>
-          
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            style={{
-              marginTop: '1rem',
-              marginBottom: '2rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '8px',
-              backgroundColor: 'rgba(59, 130, 246, 0.05)',
-              padding: '0.5rem 1rem',
-              borderRadius: '100px',
-              border: '1px solid rgba(59, 130, 246, 0.2)',
-              width: 'fit-content',
-              margin: '1rem auto 3rem auto'
-            }}
-          >
-            <Eye size={16} color="#3b82f6" />
-            <span style={{ 
-              fontSize: '0.85rem', 
-              fontWeight: 800, 
-              color: '#3b82f6', 
-              letterSpacing: '0.5px',
-              textTransform: 'uppercase'
-            }}>
-              {liveUsers} PESSOAS VENDO AGORA
-            </span>
-          </motion.div>
 
           {/* New Photo Gallery Section */}
           {galleryImages.length > 0 && (
@@ -1205,36 +1049,12 @@ function App() {
           )}
           <motion.button
             className="btn-cta"
-            animate={{ 
-              scale: [1, 1.05, 1],
-              boxShadow: [
-                '0 0 20px rgba(245, 158, 11, 0.3)',
-                '0 0 40px rgba(245, 158, 11, 0.6)',
-                '0 0 20px rgba(245, 158, 11, 0.3)'
-              ]
-            }}
-            transition={{ 
-              repeat: Infinity, 
-              duration: 2,
-              ease: "easeInOut"
-            }}
-            whileHover={{ scale: 1.1, boxShadow: '0 0 50px rgba(245, 158, 11, 0.8)' }}
-            whileTap={{ scale: 0.95 }}
-            style={{ 
-              borderRadius: '1rem', 
-              padding: '1.5rem', 
-              fontSize: '1.25rem',
-              fontWeight: 800,
-              textTransform: 'uppercase',
-              letterSpacing: '1px',
-              background: 'linear-gradient(45deg, #f59e0b 0%, #fbbf24 100%)',
-              color: '#000',
-              border: 'none',
-              cursor: 'pointer'
-            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{ borderRadius: '1rem', padding: '1.25rem' }}
             onClick={() => document.getElementById('loan-options')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            💰 Solicitar Agora
+            💰 Solicite Agora
           </motion.button>
         </motion.div>
 
@@ -1285,15 +1105,7 @@ function App() {
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span className="badge-number">{opt.id}</span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#ffffff', letterSpacing: '0.5px' }}>PAGA {opt.fee}</span>
-                  {opt.promoFee && (
-                    <div style={{ backgroundColor: 'rgba(251, 113, 133, 0.2)', padding: '2px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#fb7185' }}>-25%</span>
-                      <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#fb7185' }}>{opt.promoFee}</span>
-                    </div>
-                  )}
-                </div>
+                <span style={{ fontWeight: 800, fontSize: '1rem', color: '#ffffff', letterSpacing: '0.5px' }}>PAGA {opt.fee}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ffffff', fontSize: '0.9rem', paddingLeft: '2px' }}>
                 <span style={{ fontSize: '1.1rem' }}>👉</span>
@@ -1303,167 +1115,35 @@ function App() {
           ))}
         </motion.div>
 
-        <div style={{ marginBottom: '2rem' }}></div>
+        {/* Selected Option Detail Panel (ALWAYS VISIBLE) */}
+        <motion.div
+          className="card border-gold"
+          style={{ marginTop: '2.5rem', padding: '1.5rem', backgroundColor: '#05100b' }}
+          variants={itemVariants}
+        >
+          <h3 style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem', color: 'white', justifyContent: 'flex-start', fontSize: '1.25rem' }}>
+            📌 Opção Selecionada
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {/* Taxa */}
+            <div style={{ backgroundColor: '#2d1414', padding: '1.25rem', borderRadius: '1rem', textAlign: 'center', border: '1px solid rgba(255, 77, 77, 0.1)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#ff4d4d', marginBottom: '0.5rem' }}>Taxa de Inscrição</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>{selectedOption ? selectedOption.fee : '---'}</div>
+            </div>
 
-        {/* Consolidated Request Summary & Repayment Selection */}
-        <AnimatePresence>
-          {selectedOption && (
-            <motion.div
-              key="selection-summary"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              className="card border-gold"
-              style={{ 
-                marginTop: '4rem', 
-                padding: '2rem', 
-                background: 'linear-gradient(135deg, rgba(8, 18, 14, 0.95) 0%, rgba(4, 22, 15, 0.95) 100%)',
-                boxShadow: '0 20px 50px rgba(0,0,0,0.6)'
-              }}
-            >
-              <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '1.5rem', color: '#eab308', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '1.5rem' }}>
-                  📋 Resumo da sua Solicitação
-                </h2>
-                
-                <div style={{ overflowX: 'auto', borderRadius: '1rem', border: '1px solid rgba(255, 255, 255, 0.1)', marginBottom: '1.5rem', textAlign: 'left' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'rgba(255, 255, 255, 0.02)' }}>
-                    <tbody>
-                      <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                        <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>VOCÊ RECEBE</td>
-                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#22c55e' }}>{selectedOption.receive}</td>
-                      </tr>
-                      <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
-                        <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>A PAGAR (TAXA)</td>
-                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#ef4444' }}>{selectedOption.promoFee || selectedOption.fee}</td>
-                      </tr>
-                      <tr>
-                        <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>PRAZO TOTAL</td>
-                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#eab308' }}>{selectedOption.period}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
+            {/* Valor */}
+            <div style={{ backgroundColor: '#2d2614', padding: '1.25rem', borderRadius: '1rem', textAlign: 'center', border: '1px solid rgba(234, 179, 8, 0.1)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#eab308', marginBottom: '0.5rem' }}>Valor a Receber</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>{selectedOption ? selectedOption.receive : '---'}</div>
+            </div>
 
-              {/* Repayment Part */}
-              <h3 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', marginBottom: '2rem', color: '#eab308', fontSize: '1.25rem', textAlign: 'center' }}>
-                📅 Como deseja efetuar o pagamento?
-              </h3>
-            
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {/* Monthly Option */}
-                <motion.div
-                  onClick={() => setRepaymentMethod('monthly')}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  style={{
-                    padding: '1.5rem',
-                    borderRadius: '1.5rem',
-                    backgroundColor: repaymentMethod === 'monthly' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                    border: repaymentMethod === 'monthly' ? '2px solid #22c55e' : '1px solid rgba(255, 255, 255, 0.1)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.75rem' }}>
-                    <div style={{ 
-                      width: '24px', height: '24px', borderRadius: '50%', 
-                      border: `2px solid ${repaymentMethod === 'monthly' ? '#22c55e' : '#94a3b8'}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center'
-                    }}>
-                      {repaymentMethod === 'monthly' && <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#22c55e' }} />}
-                    </div>
-                    <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'white' }}>PARCELADO MENSAL 🗓️</span>
-                  </div>
-                  <div style={{ paddingLeft: '36px' }}>
-                    <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
-                      Pague o seu empréstimo em parcelas mensais suaves ao longo do prazo escolhido.
-                    </p>
-                    <AnimatePresence>
-                      {repaymentMethod === 'monthly' && (
-                        <motion.div 
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          style={{ 
-                            marginTop: '1rem', 
-                            backgroundColor: 'rgba(34, 197, 94, 0.15)', 
-                            padding: '1rem', 
-                            borderRadius: '1rem', 
-                            border: '1px solid rgba(34, 197, 94, 0.3)',
-                            overflow: 'hidden'
-                          }}
-                        >
-                          <div style={{ fontSize: '0.8rem', color: '#22c55e', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Prestação Mensal Estimada:</div>
-                          <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>
-                            {getMonthlyPaymentRange(selectedOption.receive, selectedOption.period)} / mês
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-
-                {/* End of Term Option */}
-                <motion.div
-                  onClick={() => setRepaymentMethod('end_of_term')}
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.98 }}
-                  style={{
-                    padding: '1.5rem',
-                    borderRadius: '1.5rem',
-                    backgroundColor: repaymentMethod === 'end_of_term' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(255, 255, 255, 0.03)',
-                    border: repaymentMethod === 'end_of_term' ? '2px solid #ef4444' : '1px solid rgba(255, 255, 255, 0.1)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '0.75rem' }}>
-                    <div style={{ 
-                      width: '24px', height: '24px', borderRadius: '50%', 
-                      border: `2px solid ${repaymentMethod === 'end_of_term' ? '#ef4444' : '#94a3b8'}`,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center'
-                    }}>
-                      {repaymentMethod === 'end_of_term' && <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: '#ef4444' }} />}
-                    </div>
-                    <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'white' }}>PAGAR TUDO NO FINAL 🏁</span>
-                  </div>
-                  <div style={{ paddingLeft: '36px' }}>
-                    <p style={{ fontSize: '0.9rem', color: '#94a3b8', margin: 0, lineHeight: 1.5 }}>
-                      Sem preocupações mensais. Devolva todo o montante de uma só vez no final do prazo.
-                    </p>
-                    <AnimatePresence>
-                      {repaymentMethod === 'end_of_term' && (
-                        <motion.div 
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: 'auto' }}
-                          exit={{ opacity: 0, height: 0 }}
-                          style={{ 
-                            marginTop: '1rem', 
-                            backgroundColor: 'rgba(239, 68, 68, 0.15)', 
-                            padding: '1rem', 
-                            borderRadius: '1rem', 
-                            border: '1px solid rgba(239, 68, 68, 0.3)',
-                            overflow: 'hidden'
-                          }}
-                        >
-                          <div style={{ fontSize: '0.8rem', color: '#ef4444', fontWeight: 700, textTransform: 'uppercase', marginBottom: '4px' }}>Data para Pagamento Único:</div>
-                          <div style={{ fontSize: '1.2rem', fontWeight: 800, color: 'white' }}>
-                            {getTargetMonth(selectedOption.period).month} de {getTargetMonth(selectedOption.period).year}
-                          </div>
-                          <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '4px' }}>
-                            (Daqui a exatamente {getTargetMonth(selectedOption.period).count} meses)
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                </motion.div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+            {/* Prazo */}
+            <div style={{ backgroundColor: '#142d20', padding: '1.25rem', borderRadius: '1rem', textAlign: 'center', border: '1px solid rgba(34, 197, 94, 0.1)' }}>
+              <div style={{ fontSize: '1.25rem', fontWeight: 800, color: '#22c55e', marginBottom: '0.5rem' }}>Prazo</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: 'white' }}>{selectedOption ? selectedOption.period : '---'}</div>
+            </div>
+          </div>
+        </motion.div>
 
         {/* Request Form */}
         <motion.div variants={itemVariants} className="card border-gold" style={{ marginTop: '3rem', padding: '2rem' }}>
@@ -1633,84 +1313,6 @@ function App() {
         </motion.div>
 
         {/* Payment Details (Simbine Only) */}
-        {/* Final Summary Table Section */}
-        <AnimatePresence>
-          {selectedOption && (
-            <motion.div
-              key="final-summary-card"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="card border-gold"
-              style={{ 
-                marginTop: '4rem', 
-                padding: '2.5rem 1.5rem',
-                backgroundImage: 'linear-gradient(180deg, #08120e 0%, #04160f 100%)',
-                position: 'relative',
-                overflow: 'hidden'
-              }}
-            >
-              <div style={{ position: 'absolute', top: 0, right: 0, opacity: 0.03 }}>
-                <Zap size={200} color="#f59e0b" />
-              </div>
-
-              <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '1.4rem', color: '#f59e0b', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                  📋 Tabela de Resumo Final
-                </h2>
-                <div style={{ width: '40px', height: '4px', backgroundColor: '#f59e0b', margin: '15px auto', borderRadius: '2px' }} />
-              </div>
-
-              <div style={{ overflowX: 'auto', borderRadius: '1rem', border: '1px solid rgba(245, 158, 11, 0.2)' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'rgba(255,255,255,0.02)' }}>
-                  <tbody>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>NOME DO CANDIDATO</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 700, color: 'white' }}>{clientName || '---'}</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>MONTANTE A RECEBER</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#22c55e', fontSize: '1.1rem' }}>{selectedOption.receive}</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>TAXA DE INSCRIÇÃO</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#fb7185' }}>{selectedOption.promoFee || selectedOption.fee}</td>
-                    </tr>
-                    <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                      <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>MÉTODO ESCOLHIDO</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 700, color: '#f59e0b' }}>
-                        {repaymentMethod === 'monthly' ? 'PARCELADO MENSAL' : repaymentMethod === 'end_of_term' ? 'PAGAR TUDO NO FINAL' : 'Pendente de seleção'}
-                      </td>
-                    </tr>
-                    {repaymentMethod === 'monthly' && (
-                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>MENSALIDADE FIXA</td>
-                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: 'white' }}>{getMonthlyPaymentRange(selectedOption.receive, selectedOption.period)}</td>
-                      </tr>
-                    )}
-                    {repaymentMethod === 'end_of_term' && (
-                      <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                        <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>LIQUIDAÇÃO FINAL EM</td>
-                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: 'white' }}>{getTargetMonth(selectedOption.period).month} de {getTargetMonth(selectedOption.period).year}</td>
-                      </tr>
-                    )}
-                    <tr style={{ backgroundColor: 'rgba(245, 158, 11, 0.05)' }}>
-                      <td style={{ padding: '1rem', color: '#f59e0b', fontWeight: 800, fontSize: '0.9rem' }}>ESTADO DO PEDIDO</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 900, color: '#f59e0b' }}>✓ PRONTO A PROCESSAR</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-              <div style={{ marginTop: '2rem', padding: '1rem', backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center' }}>
-                <p style={{ color: '#94a3b8', fontSize: '0.85rem', lineHeight: 1.5, margin: 0 }}>
-                  Ao efetuar o pagamento da taxa de inscrição, o seu crédito será processado automaticamente para o número indicado no formulário.
-                </p>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
         <motion.div
           variants={itemVariants}
           style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', marginTop: '2rem' }}
