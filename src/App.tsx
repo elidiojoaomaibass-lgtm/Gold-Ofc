@@ -20,24 +20,26 @@ import {
 interface LoanOption {
   id: number;
   fee: string;
-  promoFee?: string;
   receive: string;
   period: string;
 }
 
 const LOAN_OPTIONS: LoanOption[] = [
-  { id: 1, fee: "516 MT", receive: "5.000–7.000 MT", period: "3 meses" },
-  { id: 2, fee: "888 MT", receive: "8.000–10.000 MT", period: "4 meses" },
-  { id: 3, fee: "1099 MT", receive: "12.000–15.000 MT", period: "5 meses" },
-  { id: 4, fee: "1257 MT", receive: "20.000–23.000 MT", period: "6 meses" },
-  { id: 5, fee: "1693 MT", promoFee: "1270 MT", receive: "25.000–37.000 MT", period: "7 meses" },
-  { id: 6, fee: "1903 MT", promoFee: "1427 MT", receive: "50.000–64.000 MT", period: "8 meses" },
-  { id: 7, fee: "2109 MT", promoFee: "1582 MT", receive: "68.000–86.000 MT", period: "9 meses" },
-  { id: 8, fee: "2601 MT", promoFee: "1951 MT", receive: "87.000–100.000 MT", period: "10 meses" },
-  { id: 9, fee: "2903 MT", promoFee: "2177 MT", receive: "120.000–135.000 MT", period: "11 meses" },
-  { id: 10, fee: "3016 MT", promoFee: "2262 MT", receive: "136.000–167.000 MT", period: "12 meses" },
-  { id: 11, fee: "3801 MT", promoFee: "2851 MT", receive: "168.000–189.000 MT", period: "13 meses" },
-  { id: 12, fee: "4016 MT", promoFee: "3012 MT", receive: "190.000–200.000 MT", period: "14 meses" },
+  { id: 1, fee: "549 MT", receive: "5.000–7.000 MT", period: "3 meses" },
+  { id: 2, fee: "957 MT", receive: "8.000–10.000 MT", period: "4 meses" },
+  { id: 3, fee: "1197 MT", receive: "12.000–15.000 MT", period: "5 meses" },
+  { id: 4, fee: "1350 MT", receive: "16.000–19.000 MT", period: "6 meses" },
+  { id: 5, fee: "1693 MT", receive: "20.000–23.000 MT", period: "7 meses" },
+  { id: 6, fee: "1997 MT", receive: "25.000–37.000 MT", period: "8 meses" },
+  { id: 7, fee: "2147 MT", receive: "38.000–49.000 MT", period: "9 meses" },
+  { id: 8, fee: "2447 MT", receive: "50.000–64.000 MT", period: "10 meses" },
+  { id: 9, fee: "2718 MT", receive: "68.000–86.000 MT", period: "11 meses" },
+  { id: 10, fee: "3137 MT", receive: "87.000–100.000 MT", period: "12 meses" },
+  { id: 11, fee: "3897 MT", receive: "102.000–118.000 MT", period: "13 meses" },
+  { id: 12, fee: "4099 MT", receive: "120.000–135.000 MT", period: "14 meses" },
+  { id: 13, fee: "4597 MT", receive: "136.000–167.000 MT", period: "15 meses" },
+  { id: 14, fee: "5005 MT", receive: "168.000–189.000 MT", period: "16 meses" },
+  { id: 15, fee: "5555 MT", receive: "190.000–200.000 MT", period: "17 meses" },
 ];
 
 const containerVariants = {
@@ -964,62 +966,7 @@ function App() {
             aprovação em até <span className="text-red">8 minutos</span>
           </p>
 
-          {/* Women's Month Promotion Banner */}
-          <motion.div
-            variants={itemVariants}
-            style={{
-              background: 'linear-gradient(135deg, #2a1b2a 0%, #04160f 100%)',
-              borderRadius: '1.5rem',
-              padding: '2rem',
-              margin: '2rem 0',
-              border: '1px solid rgba(251, 113, 133, 0.3)',
-              position: 'relative',
-              overflow: 'hidden',
-              boxShadow: '0 20px 40px rgba(251, 113, 133, 0.1)'
-            }}
-          >
-            <div style={{ position: 'absolute', top: '-20px', right: '-20px', opacity: 0.1 }}>
-              <span style={{ fontSize: '10rem' }}>🌸</span>
-            </div>
-            
-            <div style={{ position: 'relative', zIndex: 2 }}>
-              <div style={{ 
-                backgroundColor: 'rgba(251, 113, 133, 0.15)', 
-                color: '#fb7185', 
-                padding: '0.4rem 1rem', 
-                borderRadius: '2rem', 
-                fontSize: '0.75rem', 
-                fontWeight: 800,
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                marginBottom: '1rem',
-                border: '1px solid rgba(251, 113, 133, 0.2)'
-              }}>
-                <span>🌹</span> ESPECIAL MÊS DA MULHER
-              </div>
-              
-              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#fcfbf8', marginBottom: '0.5rem', lineHeight: 1.2 }}>
-                Mulher de <span style={{ color: '#fb7185' }}>Ouro</span> ✨
-              </h2>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: 1.5, marginBottom: '1.5rem' }}>
-                Valorizamos a força da mulher moçambicana. <br />
-                Aproveite <span style={{ color: '#fb7185', fontWeight: 700 }}>25% DE DESCONTO</span> em todas as taxas de inscrição.
-              </p>
-              
-              <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Válido até</div>
-                  <div style={{ color: 'white', fontWeight: 700 }}>30 de Abril</div>
-                </div>
-                <div style={{ width: '1px', backgroundColor: 'rgba(255,255,255,0.1)' }}></div>
-                <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px' }}>Exclusivo</div>
-                  <div style={{ color: 'white', fontWeight: 700 }}>Público Feminino</div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
+
 
           {/* Video Section - Vertical Format */}
           <motion.div 
@@ -1287,12 +1234,6 @@ function App() {
                 <span className="badge-number">{opt.id}</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#ffffff', letterSpacing: '0.5px' }}>PAGA {opt.fee}</span>
-                  {opt.promoFee && (
-                    <div style={{ backgroundColor: 'rgba(251, 113, 133, 0.2)', padding: '2px 6px', borderRadius: '4px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                      <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#fb7185' }}>-25%</span>
-                      <span style={{ fontWeight: 800, fontSize: '0.95rem', color: '#fb7185' }}>{opt.promoFee}</span>
-                    </div>
-                  )}
                 </div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#ffffff', fontSize: '0.9rem', paddingLeft: '2px' }}>
@@ -1335,7 +1276,7 @@ function App() {
                       </tr>
                       <tr style={{ borderBottom: '1px solid rgba(255, 255, 255, 0.05)' }}>
                         <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>A PAGAR (TAXA)</td>
-                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#ef4444' }}>{selectedOption.promoFee || selectedOption.fee}</td>
+                        <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#ef4444' }}>{selectedOption.fee}</td>
                       </tr>
                       <tr>
                         <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>PRAZO TOTAL</td>
