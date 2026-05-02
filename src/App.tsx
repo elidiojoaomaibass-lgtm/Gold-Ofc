@@ -1615,7 +1615,7 @@ function App() {
                     </tr>
                     <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>TAXA DE INSCRIÇÃO</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#fb7185' }}>{selectedOption.promoFee || selectedOption.fee}</td>
+                      <td style={{ padding: '1rem', textAlign: 'right', fontWeight: 800, color: '#fb7185' }}>{selectedOption.fee}</td>
                     </tr>
                     <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <td style={{ padding: '1rem', color: '#94a3b8', fontWeight: 600, fontSize: '0.9rem' }}>MÉTODO ESCOLHIDO</td>
