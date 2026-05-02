@@ -181,7 +181,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    loadFromSupabase();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    void loadFromSupabase();
   }, [loadFromSupabase]);
 
 
@@ -326,8 +327,8 @@ function App() {
       } else {
         alert(`Erro Supabase: ${error.message}`);
       }
-    } catch (err: any) {
-      alert('Erro inesperado: ' + err.message);
+    } catch (err: unknown) {
+      alert('Erro inesperado: ' + (err as Error).message);
     }
   };
 
@@ -500,7 +501,7 @@ function App() {
                     ].map(tab => (
                       <button
                         key={tab.id}
-                        onClick={() => setActiveAdminTab(tab.id as any)}
+                        onClick={() => setActiveAdminTab(tab.id as 'overview' | 'video' | 'gallery' | 'logs')}
                         style={{ 
                           flex: 1, padding: '0.8rem', borderRadius: '0.75rem', border: 'none', 
                           backgroundColor: activeAdminTab === tab.id ? '#f59e0b' : 'transparent',
