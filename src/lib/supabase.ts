@@ -1,13 +1,15 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Supabase URL e/ou ANON KEY não configurados no ficheiro .env');
+export const supabase = (supabaseUrl && supabaseAnonKey) 
+  ? createClient(supabaseUrl, supabaseAnonKey) 
+  : null as any;
+
+if (!supabase) {
+  console.warn('⚠️ Supabase URL e/ou ANON KEY não configurados. Algumas funcionalidades podem estar limitadas.');
 }
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // ---- Tipos das tabelas ----
 

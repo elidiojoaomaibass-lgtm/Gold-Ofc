@@ -170,6 +170,7 @@ function App() {
 
   // -------- Supabase: carregar dados ao montar --------
   const loadFromSupabase = useCallback(async () => {
+    if (!supabase) return;
     // Carregar configurações CMS
     const { data: settings } = await supabase
       .from('cms_settings')
