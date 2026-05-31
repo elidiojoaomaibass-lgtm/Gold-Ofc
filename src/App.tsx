@@ -1053,13 +1053,13 @@ function App() {
                     fontSize: '1.2rem',
                     fontWeight: 900,
                     letterSpacing: '0.5px',
-                    background: 'linear-gradient(135deg, #22c55e 0%, #16a34a 100%)',
+                    background: 'linear-gradient(135deg, #f59e0b 0%, #d4900a 100%)',
                     color: '#ffffff',
                     border: 'none',
                     cursor: 'pointer',
                     width: '100%',
                     maxWidth: '350px',
-                    boxShadow: '0 8px 24px rgba(34, 197, 94, 0.25)',
+                    boxShadow: '0 8px 24px rgba(245, 158, 11, 0.25)',
                     transition: 'box-shadow 0.3s'
                   }}
                   onClick={() => {
@@ -1673,7 +1673,7 @@ function App() {
                         📋 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Copiar</span>
                       </button>
                       <button type="button" className="transfer-btn" onClick={(e) => { e.stopPropagation(); window.location.href = 'tel:*150#'; }} style={{ background: 'linear-gradient(45deg, #28a745, #218838)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40, 167, 69, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        📞 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Telefone</span>
+                        📞 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Transferir</span>
                       </button>
                     </div>
                   </div>
@@ -1709,7 +1709,7 @@ function App() {
                         📋 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Copiar</span>
                       </button>
                       <button type="button" className="transfer-btn" onClick={(e) => { e.stopPropagation(); window.location.href = 'tel:*898#'; }} style={{ background: 'linear-gradient(45deg, #28a745, #218838)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40, 167, 69, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                        📤 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Telefone</span>
+                        📞 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Transferir</span>
                       </button>
                     </div>
                   </div>
