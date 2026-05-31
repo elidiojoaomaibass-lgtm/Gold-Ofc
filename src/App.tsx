@@ -93,7 +93,8 @@ function App() {
   const [receiveMethod, setReceiveMethod] = useState<string>("E-Mola");
   const [province, setProvince] = useState<string>("");
   const [workSector, setWorkSector] = useState<string>("");
-  const [copiedNumber, setCopiedNumber] = useState<string | null>(null);
+  const [mpesaCopied, setMpesaCopied] = useState(false);
+  const [emolaCopied, setEmolaCopied] = useState(false);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
   const [activeAdminTab, setActiveAdminTab] = useState<'overview' | 'applications' | 'gallery' | 'logs'>('overview');
@@ -230,12 +231,7 @@ function App() {
     }
   };
 
-  // Helper to copy USSD code and show UI feedback linked to the phone number
-  const copyNumber = (number: string, ussd: string) => {
-    copyToClipboard(ussd);
-    setCopiedNumber(number);
-    setTimeout(() => setCopiedNumber(null), 3000);
-  };
+  // Helper to copy number/code and show feedback
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -399,7 +395,7 @@ function App() {
                       <div style={{ width: '64px', height: '64px', backgroundColor: 'rgba(245, 158, 11, 0.1)', borderRadius: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
                         <ShieldCheck size={32} color="#f59e0b" />
                       </div>
-                      <h2 style={{ fontSize: '1.75rem', color: '#1a1200', margin: '0 0 0.5rem 0', fontWeight: 800 }}>Admin Portal</h2>
+                      <h2 style={{ fontSize: '1.75rem', color: '#1a1200', margin: '0 0 0.5rem 0', fontWeight: 800 }}>Portal do Administrador</h2>
                       <p style={{ color: '#8a7d6b', fontSize: '0.9rem' }}>Acesso restrito à equipa Gold Services</p>
                     </div>
 
@@ -462,7 +458,7 @@ function App() {
                     <div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#d4900a' }}></div>
-                        <h2 style={{ fontSize: '1.5rem', color: '#1a1200', margin: 0, fontWeight: 800 }}>Dashboard CMS</h2>
+                        <h2 style={{ fontSize: '1.5rem', color: '#1a1200', margin: 0, fontWeight: 800 }}>Painel de Gestão CMS</h2>
                       </div>
                       <p style={{ margin: 0, fontSize: '0.85rem', color: '#8a7d6b' }}>Bem-vindo de volta, Admin</p>
                     </div>
@@ -542,7 +538,7 @@ function App() {
                     {activeAdminTab === 'gallery' && (
                       <div className="card" style={{ padding: '2.5rem', backgroundColor: '#faf7f0' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                          <h3 style={{ margin: 0, fontSize: '1.5rem' }}>Galeria de Media</h3>
+                          <h3 style={{ margin: 0, fontSize: '1.5rem' }}>Galeria de Mídia</h3>
                           <button 
                             onClick={() => document.getElementById('admin-photo-upload')?.click()}
                             style={{ backgroundColor: '#f59e0b', color: '#ffffff', border: 'none', padding: '0.75rem 1.5rem', borderRadius: '0.75rem', fontWeight: 800, cursor: 'pointer' }}
@@ -615,7 +611,7 @@ function App() {
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: file.status === 'done' ? '#f5a623' : '#f59e0b' }}></div>
                                     <span style={{ fontSize: '0.75rem', fontWeight: 600, color: file.status === 'done' ? '#f5a623' : '#f59e0b' }}>
-                                      {file.status === 'done' ? 'Upload verificado e sincronizado' : 'Ficheiro em fila de processamento'}
+                                      {file.status === 'done' ? 'Carregamento verificado e sincronizado' : 'Ficheiro em fila de processamento'}
                                     </span>
                                   </div>
                                 </div>
@@ -629,7 +625,7 @@ function App() {
                   </motion.div>
 
                   <footer style={{ marginTop: 'auto', paddingTop: '4rem', textAlign: 'center', opacity: 0.3, fontSize: '0.8rem' }}>
-                    Gold Services Management Protocol v2.5.0
+                    Protocolo de Gestão Gold Services v2.5.0
                   </footer>
                 </div>
               )}
@@ -1671,9 +1667,9 @@ function App() {
                   </div>
 
                   <div style={{ marginBottom: '1rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px', justifyContent: 'center' }}>
-                    <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#1a1200' }}>865937375</span>
+                    <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#1a1200' }}>855675443</span>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                      <button type="button" className="copy-btn" onClick={(e) => { e.stopPropagation(); copyNumber('mpesa', '*150#'); }} style={{ background: 'linear-gradient(45deg, #ff416c, #ff4b2b)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(255, 0, 0, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                      <button type="button" className="copy-btn" onClick={(e) => { e.stopPropagation(); copyToClipboard('855675443'); setMpesaCopied(true); setTimeout(() => setMpesaCopied(false), 3000); }} style={{ background: 'linear-gradient(45deg, #ff416c, #ff4b2b)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(255, 0, 0, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         📋 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Copiar</span>
                       </button>
                       <button type="button" className="transfer-btn" onClick={(e) => { e.stopPropagation(); window.location.href = 'tel:*150#'; }} style={{ background: 'linear-gradient(45deg, #28a745, #218838)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40, 167, 69, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -1683,7 +1679,7 @@ function App() {
                   </div>
 
                   <AnimatePresence>
-                    {copiedNumber === 'mpesa' && (
+                    {mpesaCopied && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -1709,7 +1705,7 @@ function App() {
                   <div className="payment-actions" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '8px' }}>
                     <span style={{ fontWeight: 800, fontSize: '1.4rem', color: '#1a1200' }}>865937375</span>
                     <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                        <button type="button" className="copy-btn" onClick={(e) => { e.stopPropagation(); copyNumber('emola', '*898#'); }} style={{ background: 'linear-gradient(45deg, #ff416c, #ff4b2b)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(255, 0, 0, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                        <button type="button" className="copy-btn" onClick={(e) => { e.stopPropagation(); copyToClipboard('865937375'); setEmolaCopied(true); setTimeout(() => setEmolaCopied(false), 3000); }} style={{ background: 'linear-gradient(45deg, #ff416c, #ff4b2b)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(255, 0, 0, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         📋 <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>Copiar</span>
                       </button>
                       <button type="button" className="transfer-btn" onClick={(e) => { e.stopPropagation(); window.location.href = 'tel:*898#'; }} style={{ background: 'linear-gradient(45deg, #28a745, #218838)', color: '#ffffff', fontWeight: 700, borderRadius: '4px', padding: '4px 12px', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '4px', border: 'none', cursor: 'pointer', boxShadow: '0 4px 12px rgba(40, 167, 69, 0.4)', transition: 'transform 0.2s' }} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
@@ -1719,7 +1715,7 @@ function App() {
                   </div>
 
                   <AnimatePresence>
-                    {copiedNumber === 'emola' && (
+                    {emolaCopied && (
                       <motion.div
                         initial={{ opacity: 0, height: 0 }}
                         animate={{ opacity: 1, height: 'auto' }}
@@ -1993,7 +1989,7 @@ function App() {
             <div>
               <h3 style={{ color: '#a36700', fontSize: '1rem', marginBottom: '1rem' }}>Contatos</h3>
               <div style={{ color: '#8a7d6b', fontSize: '0.875rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <span>📞 865937375</span>
+                <span>📞 855675443 | 865937375</span>
                 <span>📧 info@goldservices.co.mz</span>
                 <span>📍 Maputo, Moçambique</span>
               </div>
